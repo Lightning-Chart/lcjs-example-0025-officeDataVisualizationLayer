@@ -15,36 +15,29 @@ const {
     UIElementBuilders,
     UIOrigins,
     LegendBoxBuilders,
-    Themes
+    Themes,
 } = lcjs
 
 const chartPadding = 10
-const chart = lightningChart().ChartXY({
-    // theme: Themes.darkGold
-})
-    .setAnimationsEnabled(false)
+const chart = lightningChart()
+    .ChartXY({
+        // theme: Themes.darkGold
+    })
     .setMouseInteractions(false)
     .setTitle('Office layout data visualization layer')
-    .setAutoCursor(autoCursor => autoCursor
-        .disposeTickMarkerX()
-        .disposeTickMarkerY()
-    )
+    .setAutoCursor((autoCursor) => autoCursor.setTickMarkerXVisible(false).setTickMarkerYVisible(false))
+    .setSeriesBackgroundStrokeStyle(emptyLine)
 
-chart.forEachAxis((axis) => axis
-    .setTickStrategy(AxisTickStrategies.Empty)
-    .setStrokeStyle(emptyLine)
-    .setInterval(0, 1, false, true)
-)
+chart.forEachAxis((axis) => axis.setTickStrategy(AxisTickStrategies.Empty).setStrokeStyle(emptyLine).setInterval({ start: 0, end: 1 }))
 
-const legend = chart.addLegendBox(LegendBoxBuilders.VerticalLegendBox)
-    .setAutoDispose({
-        type: 'max-width',
-        maxHeight: 0.30,
-    })
+const legend = chart.addLegendBox(LegendBoxBuilders.VerticalLegendBox).setAutoDispose({
+    type: 'max-width',
+    maxHeight: 0.3,
+})
 
 const officeLayoutImage = new Image()
 officeLayoutImage.crossOrigin = ''
-officeLayoutImage.src = document.head.baseURI + 'examples/assets/lcjs_example_0025_officeDataVisualizationLayer-office.png'
+officeLayoutImage.src = document.head.baseURI + 'examples/assets/0025/office.png'
 officeLayoutImage.onload = () => {
     chart.setSeriesBackgroundFillStyle(
         new ImageFill({
@@ -77,44 +70,52 @@ officeLayoutImage.onload = () => {
     window.addEventListener('resize', updateChartAspectRatio)
 
     // Load heat map data visualization layer data set.
-    fetch(document.head.baseURI + 'examples/assets/lcjs_example_0025_officeDataVisualizationLayer-office-wifi-strength.json')
-        .then(r => r.json())
-        .then(data => {
+    fetch(document.head.baseURI + 'examples/assets/0025/office-wifi-strength.json')
+        .then((r) => r.json())
+        .then((data) => {
             const wifiStrengthMatrix = data.data
-            const heatmap = chart.addHeatmapGridSeries({
-                columns: wifiStrengthMatrix.length,
-                rows: wifiStrengthMatrix[0].length,
-                start: { x: 0, y: 0 },
-                end: { x: 1, y: 1 }
-            })
+            const heatmap = chart
+                .addHeatmapGridSeries({
+                    columns: wifiStrengthMatrix.length,
+                    rows: wifiStrengthMatrix[0].length,
+                    start: { x: 0, y: 0 },
+                    end: { x: 1, y: 1 },
+                })
                 .setName('Wi-Fi Strength')
                 .invalidateIntensityValues(wifiStrengthMatrix)
                 .setWireframeStyle(emptyLine)
-                .setFillStyle(new PalettedFill({
-                    lookUpProperty: 'value',
-                    lut: new LUT({
-                        interpolate: false,
-                        steps: [
-                            // Value 0 = no measurement.
-                            { value: 0, color: ColorRGBA(0, 0, 0, 0), label: '' },
-                            // Value 1 = weak wifi strength.
-                            { value: .9, color: ColorRGBA(255, 0, 0, 50), label: 'Weak' },
-                            // Value 2 = medium wifi strength.
-                            { value: 1.9, color: ColorRGBA(255, 255, 0, 50), label: 'Medium' },
-                            // Value 3 = good wifi strength.
-                            { value: 2.9, color: ColorRGBA(0, 255, 0, 50), label: 'Good' }
-                        ]
-                    })
-                }))
-                .setCursorResultTableFormatter((builder, series, dataPoint) => builder
-                    .addRow(series.getName())
-                    .addRow(
-                        dataPoint.intensity === 0 ? 'No measurement' :
-                        dataPoint.intensity === 1 ? 'Weak' :
-                        dataPoint.intensity === 2 ? 'Medium' :
-                        dataPoint.intensity === 3 ? 'Good' :
-                        '?'
-                    )
+                .setFillStyle(
+                    new PalettedFill({
+                        lookUpProperty: 'value',
+                        lut: new LUT({
+                            interpolate: false,
+                            steps: [
+                                // Value 0 = no measurement.
+                                { value: 0, color: ColorRGBA(0, 0, 0, 0), label: '' },
+                                // Value 1 = weak wifi strength.
+                                { value: 0.9, color: ColorRGBA(255, 0, 0, 50), label: 'Weak' },
+                                // Value 2 = medium wifi strength.
+                                { value: 1.9, color: ColorRGBA(255, 255, 0, 50), label: 'Medium' },
+                                // Value 3 = good wifi strength.
+                                { value: 2.9, color: ColorRGBA(0, 255, 0, 50), label: 'Good' },
+                            ],
+                        }),
+                    }),
+                )
+                .setCursorResultTableFormatter((builder, series, dataPoint) =>
+                    builder
+                        .addRow(series.getName())
+                        .addRow(
+                            dataPoint.intensity === 0
+                                ? 'No measurement'
+                                : dataPoint.intensity === 1
+                                ? 'Weak'
+                                : dataPoint.intensity === 2
+                                ? 'Medium'
+                                : dataPoint.intensity === 3
+                                ? 'Good'
+                                : '?',
+                        ),
                 )
 
             legend.add(heatmap)
@@ -123,19 +124,21 @@ officeLayoutImage.onload = () => {
     // Load router icon.
     const routerImage = new Image()
     routerImage.crossOrigin = ''
-    routerImage.src = document.head.baseURI + 'examples/assets/lcjs_example_0025_officeDataVisualizationLayer-router.png'
+    routerImage.src = document.head.baseURI + 'examples/assets/0025/router.png'
     routerImage.onload = () => {
         const iconAspectRatio = routerImage.height / routerImage.width
         const iconWidthPx = 48
         // Display router icon inside chart at preset X and Y axis coordinates (range 0-1)
-        const routerIcon = chart.addUIElement(UIElementBuilders.TextBox, { x: chart.getDefaultAxisX(), y: chart.getDefaultAxisY() })
+        const routerIcon = chart
+            .addUIElement(UIElementBuilders.TextBox, { x: chart.getDefaultAxisX(), y: chart.getDefaultAxisY() })
             .setText('')
             .setPadding({ left: iconWidthPx, top: iconWidthPx * iconAspectRatio })
-            .setBackground(background => background
-                .setStrokeStyle(emptyLine)
-                .setFillStyle(new ImageFill({
-                    source: routerImage
-                }))
+            .setBackground((background) =>
+                background.setStrokeStyle(emptyLine).setFillStyle(
+                    new ImageFill({
+                        source: routerImage,
+                    }),
+                ),
             )
             .setPosition({ x: 0.322, y: 0.09 })
             .setOrigin(UIOrigins.Center)
