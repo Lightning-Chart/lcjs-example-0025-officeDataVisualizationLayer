@@ -92,10 +92,10 @@ Direct developer email support can be purchased through a [Support Plan][4] or b
 © LightningChart Ltd 2009-2022. All rights reserved.
 
 
-[XY cartesian chart]: https://lightningchart.com/lightningchart-js-api-documentation/v4.0.0/classes/ChartXY.html
-[Axis]: https://lightningchart.com/lightningchart-js-api-documentation/v4.0.0/classes/Axis.html
-[Legend box]: https://lightningchart.com/lightningchart-js-api-documentation/v4.0.0/classes/Chart.html#addLegendBox
-[Image fill style]: https://lightningchart.com/lightningchart-js-api-documentation/v4.0.0/classes/ImageFill.html
-[Heatmap grid series]: https://lightningchart.com/lightningchart-js-api-documentation/v4.0.0/classes/HeatmapGridSeries.html
-[UI text box]: https://lightningchart.com/lightningchart-js-api-documentation/v4.0.0/interfaces/UITextBox.html
+[XY cartesian chart]: https://lightningchart.com/lightningchart-js-api-documentation/v4.1.0/classes/ChartXY.html
+[Axis]: https://lightningchart.com/lightningchart-js-api-documentation/v4.1.0/classes/Axis.html
+[Legend box]: https://lightningchart.com/lightningchart-js-api-documentation/v4.1.0/classes/Chart.html#addLegendBox
+[Image fill style]: https://lightningchart.com/lightningchart-js-api-documentation/v4.1.0/classes/ImageFill.html
+[Heatmap grid series]: https://lightningchart.com/lightningchart-js-api-documentation/v4.1.0/classes/HeatmapGridSeries.html
+[UI text box]: https://lightningchart.com/lightningchart-js-api-documentation/v4.1.0/interfaces/UITextBox.html
 
