@@ -21,7 +21,7 @@ const {
 const chartPadding = 10
 const chart = lightningChart()
     .ChartXY({
-        theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined,
+        theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
     })
     .setMouseInteractions(false)
     .setTitle('Office layout data visualization layer')
