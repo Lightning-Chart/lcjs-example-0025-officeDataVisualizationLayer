@@ -37,7 +37,7 @@ const legend = chart.addLegendBox(LegendBoxBuilders.VerticalLegendBox).setAutoDi
 
 const officeLayoutImage = new Image()
 officeLayoutImage.crossOrigin = ''
-officeLayoutImage.src = document.head.baseURI + 'examples/assets/0025/office.png'
+officeLayoutImage.src = new URL(document.head.baseURI).origin + new URL(document.head.baseURI).pathname + 'examples/assets/0025/office.png'
 officeLayoutImage.onload = () => {
     chart.setSeriesBackgroundFillStyle(
         new ImageFill({
@@ -70,7 +70,9 @@ officeLayoutImage.onload = () => {
     window.addEventListener('resize', updateChartAspectRatio)
 
     // Load heat map data visualization layer data set.
-    fetch(document.head.baseURI + 'examples/assets/0025/office-wifi-strength.json')
+    fetch(
+        new URL(document.head.baseURI).origin + new URL(document.head.baseURI).pathname + 'examples/assets/0025/office-wifi-strength.json',
+    )
         .then((r) => r.json())
         .then((data) => {
             const wifiStrengthMatrix = data.data
@@ -124,7 +126,7 @@ officeLayoutImage.onload = () => {
     // Load router icon.
     const routerImage = new Image()
     routerImage.crossOrigin = ''
-    routerImage.src = document.head.baseURI + 'examples/assets/0025/router.png'
+    routerImage.src = new URL(document.head.baseURI).origin + new URL(document.head.baseURI).pathname + 'examples/assets/0025/router.png'
     routerImage.onload = () => {
         const iconAspectRatio = routerImage.height / routerImage.width
         const iconWidthPx = 48
