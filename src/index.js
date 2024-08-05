@@ -2,7 +2,7 @@
  * Example showcasing LightningChart interactions with external images and icons in context of office layout data visualization.
  */
 
-const lcjs = require('@arction/lcjs')
+const lcjs = require('@lightningchart/lcjs')
 const {
     lightningChart,
     AxisTickStrategies,
@@ -27,7 +27,7 @@ const chart = lightningChart({
     })
     .setMouseInteractions(false)
     .setTitle('Office layout data visualization layer')
-    .setAutoCursor((autoCursor) => autoCursor.setTickMarkerXVisible(false).setTickMarkerYVisible(false))
+    .setCursor((autoCursor) => autoCursor.setTickMarkerXVisible(false).setTickMarkerYVisible(false))
     .setSeriesBackgroundStrokeStyle(emptyLine)
 
 chart.forEachAxis((axis) => axis.setTickStrategy(AxisTickStrategies.Empty).setStrokeStyle(emptyLine).setInterval({ start: 0, end: 1 }))
@@ -82,8 +82,6 @@ officeLayoutImage.onload = () => {
                 .addHeatmapGridSeries({
                     columns: wifiStrengthMatrix.length,
                     rows: wifiStrengthMatrix[0].length,
-                    start: { x: 0, y: 0 },
-                    end: { x: 1, y: 1 },
                 })
                 .setName('Wi-Fi Strength')
                 .invalidateIntensityValues(wifiStrengthMatrix)
@@ -105,21 +103,6 @@ officeLayoutImage.onload = () => {
                             ],
                         }),
                     }),
-                )
-                .setCursorResultTableFormatter((builder, series, dataPoint) =>
-                    builder
-                        .addRow(series.getName())
-                        .addRow(
-                            dataPoint.intensity === 0
-                                ? 'No measurement'
-                                : dataPoint.intensity === 1
-                                ? 'Weak'
-                                : dataPoint.intensity === 2
-                                ? 'Medium'
-                                : dataPoint.intensity === 3
-                                ? 'Good'
-                                : '?',
-                        ),
                 )
 
             legend.add(heatmap)
