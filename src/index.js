@@ -16,6 +16,7 @@ const {
     UIOrigins,
     LegendBoxBuilders,
     Themes,
+    isHitHeatmap,
 } = lcjs
 
 const chartPadding = 10
@@ -29,8 +30,13 @@ const chart = lightningChart({
     .setTitle('Office layout data visualization layer')
     .setCursor((autoCursor) => autoCursor.setTickMarkerXVisible(false).setTickMarkerYVisible(false))
     .setSeriesBackgroundStrokeStyle(emptyLine)
+    .setCursorFormatting((_, hit) => {
+        if (!isHitHeatmap(hit)) return
+        const wifiStrength = hit.intensity === 3 ? 'Good' : hit.intensity === 2 ? 'Medium' : hit.intensity === 1 ? 'Weak' : 'No reception'
+        return [hit.series, wifiStrength]
+    })
 
-chart.forEachAxis((axis) => axis.setTickStrategy(AxisTickStrategies.Empty).setStrokeStyle(emptyLine).setInterval({ start: 0, end: 1 }))
+chart.forEachAxis((axis) => axis.setTickStrategy(AxisTickStrategies.Empty).setStrokeStyle(emptyLine))
 
 const legend = chart.addLegendBox(LegendBoxBuilders.VerticalLegendBox).setAutoDispose({
     type: 'max-width',
@@ -104,6 +110,7 @@ officeLayoutImage.onload = () => {
                         }),
                     }),
                 )
+                .setEffect(false)
 
             legend.add(heatmap)
         })
@@ -127,7 +134,7 @@ officeLayoutImage.onload = () => {
                     }),
                 ),
             )
-            .setPosition({ x: 0.322, y: 0.09 })
+            .setPosition({ x: 290, y: 120 })
             .setOrigin(UIOrigins.Center)
     }
 }
