@@ -26,15 +26,15 @@ const chart = lightningChart({
     .ChartXY({
         theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined,
     })
-    .setMouseInteractions(false)
     .setTitle('Office layout data visualization layer')
     .setCursor((autoCursor) => autoCursor.setTickMarkerXVisible(false).setTickMarkerYVisible(false))
     .setSeriesBackgroundStrokeStyle(emptyLine)
     .setCursorFormatting((_, hit) => {
         if (!isHitHeatmap(hit)) return
         const wifiStrength = hit.intensity === 3 ? 'Good' : hit.intensity === 2 ? 'Medium' : hit.intensity === 1 ? 'Weak' : 'No reception'
-        return [hit.series, wifiStrength]
+        return [{ component: hit.series, rowFillStyle: chart.getTheme().cursorResultTableHeaderBackgroundFillStyle }, wifiStrength]
     })
+    .setUserInteractions(undefined)
 
 chart.forEachAxis((axis) => axis.setTickStrategy(AxisTickStrategies.Empty).setStrokeStyle(emptyLine))
 
