@@ -11,10 +11,8 @@ const {
     PalettedFill,
     emptyLine,
     LUT,
-    AutoCursorModes,
     UIElementBuilders,
     UIOrigins,
-    LegendBoxBuilders,
     Themes,
     isHitHeatmap,
 } = lcjs
@@ -23,7 +21,12 @@ const chartPadding = 10
 const chart = lightningChart({
             resourcesBaseUrl: new URL(document.head.baseURI).origin + new URL(document.head.baseURI).pathname + 'resources/',
         })
-    .ChartXY({
+    .ChartXY({   
+        legend: {
+            entries: {
+                lutLength: 250,
+            }
+        },
         theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined,
     })
     .setTitle('Office layout data visualization layer')
@@ -37,11 +40,6 @@ const chart = lightningChart({
     .setUserInteractions(undefined)
 
 chart.forEachAxis((axis) => axis.setTickStrategy(AxisTickStrategies.Empty).setStrokeStyle(emptyLine))
-
-const legend = chart.addLegendBox(LegendBoxBuilders.VerticalLegendBox).setAutoDispose({
-    type: 'max-width',
-    maxHeight: 0.3,
-})
 
 const officeLayoutImage = new Image()
 officeLayoutImage.crossOrigin = ''
@@ -111,8 +109,6 @@ officeLayoutImage.onload = () => {
                     }),
                 )
                 .setEffect(false)
-
-            legend.add(heatmap)
         })
 
     // Load router icon.
